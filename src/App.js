@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import config from './config.js';
 import AudioPlayer from './AudioPlayer';
+import Question from './Question/Question';
 const axios = require('axios')
 class App extends Component {
   constructor(props){
@@ -27,7 +28,7 @@ class App extends Component {
         })
       })
       .catch((err) =>
-        alert("Token is outdated"+err)
+        console.error("Token is outdated"+err)
       )
   }
   setPlayList100(){
@@ -44,21 +45,15 @@ class App extends Component {
         })
       })
       .catch((err) =>
-        alert("Token is outdated"+err)
+        console.error("Token is outdated"+err)
       )
   }
   render() {
-    if (undefined !== this.state.tracks)
-      return (
-        <div className="App">
-          <AudioPlayer tracks={this.state.tracks} />
-        </div>
-      );
-    else
-      return (
-        <div className="App">
-        </div>
-      )
+    return (
+    <div className="App">
+        <Question/>
+    </div>
+    );
   }
 }
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import config from './config.js';
+import AudioPlayer from './AudioPlayer';
 const axios = require('axios')
 class App extends Component {
   constructor(props){
@@ -21,7 +22,7 @@ class App extends Component {
         })
       })
       .catch((err) =>
-          console.log(err)
+        alert("Token is outdated"+err)
       )
   }
   render() {
@@ -36,28 +37,6 @@ class App extends Component {
         <div className="App">
         </div>
       )
-  }
-}
-class AudioPlayer extends Component{
-  constructor(props){
-    super(props);
-    this.state = { source: undefined };
-  }
-  componentDidMount() {
-    const request = axios.create({
-      baseURL: 'https://api.spotify.com/v1/tracks/'+this.props.songUri,
-      headers: config.requestHeaders
-    })
-    request.get()
-      .then((res) => {
-        this.setState({source: res.data.preview_url})
-      })
-      .catch((err) =>
-          console.log(err)
-      )
-  }
-  render(){
-    return <audio controls src={this.state.source} autoPlay></audio>
   }
 }
 

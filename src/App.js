@@ -9,6 +9,11 @@ class App extends Component {
     this.state = { tracks: undefined };
   }
   componentDidMount() {
+    this.setPlayList100()
+  }
+
+  // Set state.tracks to top tracks
+  setTracksToUsersTop(){
     const request = axios.create({
       baseURL: 'https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=10&offset=5',
       headers: config.requestHeaders
@@ -25,11 +30,28 @@ class App extends Component {
         alert("Token is outdated"+err)
       )
   }
+  setPlayList100(){
+    const request = axios.create({
+      baseURL: 'https://api.spotify.com/v1/playlists/3Xt8b8Zs1fuZ0CkDsaPOdY/tracks',
+      headers: config.requestHeaders
+    })
+    request.get()
+      .then((res) => {
+        let tracks = []
+        res.data.items.map(item => tracks.push(item.track.id))
+        this.setState({
+          tracks: tracks
+        })
+      })
+      .catch((err) =>
+        alert("Token is outdated"+err)
+      )
+  }
   render() {
     if (undefined !== this.state.tracks)
       return (
         <div className="App">
-          <AudioPlayer songUri={this.state.tracks[Math.floor(Math.random() * 10)]} />
+          <AudioPlayer tracks={this.state.tracks} />
         </div>
       );
     else

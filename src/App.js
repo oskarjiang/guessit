@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import config from './config.js';
-import AudioPlayer from './AudioPlayer';
 import Quiz from './Quiz/Quiz';
 const axios = require('axios')
 class App extends Component {

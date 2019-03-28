@@ -12,27 +12,33 @@ class Quiz extends Component{
     constructor(props){
         super(props);
         this.state = { 
-            tracks: undefined,
+            tracks: [],
+            complett: false,
             alternatives: undefined,
             correctAlternative: undefined,
         };
     } 
     componentDidMount() {
-        this.setPlayList100()
+        this.getAllItemsInPlayList('https://api.spotify.com/v1/playlists/'+this.props.playlistId+'/tracks?limit=100&offset=0')
     }
-    setPlayList100(){
+    getAllItemsInPlayList(playlistUrl){
         const request = axios.create({
-            baseURL: 'https://api.spotify.com/v1/playlists/'+this.props.playlistId+'/tracks',
+            baseURL: playlistUrl,
             headers: this.props.requestHeaders
         })
         request.get()
         .then((res) => {
-            const tracks = []
+            const tracks = this.state.tracks
             res.data.items.map(item => tracks.push(item.track))
             this.setState({
                 tracks: tracks
             })
-            this.getAlternatives();
+            const next100 = res.data.next
+            if (null === res.data.next)
+                this.getAlternatives();
+            else
+                this.getAllItemsInPlayList(next100)
+
         })
         .catch((err) =>
             console.error("Token is outdated"+err)
@@ -63,7 +69,7 @@ class Quiz extends Component{
             return (
             <div id="quiz">
                 <Question alternatives={this.state.alternatives}/>
-                <AudioPlayer tracks={[this.state.alternatives[this.state.correctAlternative]]}/>
+                <AudioPlayer tracks={[this.state.alternatives[this.state.correctAlternative]] } withGui="1"/>
             </div>
             );
         else

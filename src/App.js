@@ -9,7 +9,6 @@ class App extends Component {
     this.state = { tracks: undefined };
   }
   componentDidMount() {
-    this.setPlayList100()
   }
 
   // Set state.tracks to top tracks
@@ -22,23 +21,6 @@ class App extends Component {
       .then((res) => {
         let tracks = []
         res.data.items.map(item => tracks.push(item.id))
-        this.setState({
-          tracks: tracks
-        })
-      })
-      .catch((err) =>
-        console.error("Token is outdated"+err)
-      )
-  }
-  setPlayList100(){
-    const request = axios.create({
-      baseURL: 'https://api.spotify.com/v1/playlists/3Xt8b8Zs1fuZ0CkDsaPOdY/tracks',
-      headers: config.requestHeaders
-    })
-    request.get()
-      .then((res) => {
-        let tracks = []
-        res.data.items.map(item => tracks.push(item.track))
         this.setState({
           tracks: tracks
         })

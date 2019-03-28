@@ -4,10 +4,14 @@ import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Jumbotron from 'react-bootstrap/Jumbotron';
+import AudioPlayer from '../AudioPlayer';
 
 /*
     Props:
+        number
         alternatives
+        questionText    
+        correctAlternative
 */
 class Question extends Component{
     render(){
@@ -15,14 +19,15 @@ class Question extends Component{
             <Row>
                 <Col xs={12}>
                     <Jumbotron>
-                        <h1>Question 1</h1>
+                        <h1>Question {this.props.number}</h1>
                         <p>
-                            Which artist's song is this?
+                            {this.props.questionText}
                         </p>
                     </Jumbotron>
                 </Col>
             </Row>
             <Alternatives alternatives={this.props.alternatives}/>
+            <AudioPlayer tracks={[this.props.alternatives[this.props.correctAlternative]] }/>
         </Container>
     }
 }

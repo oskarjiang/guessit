@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Question from '../Question/Question';
-import AudioPlayer from '../AudioPlayer';
 const axios = require('axios')
 
 /*
@@ -30,14 +29,13 @@ class Quiz extends Component{
         .then((res) => {
             const tracks = this.state.tracks
             res.data.items.map(item => tracks.push(item.track))
-            this.setState({
-                tracks: tracks
-            })
+            this.setState({ tracks: tracks })
             const next100 = res.data.next
-            if (null === res.data.next)
-                this.getAlternatives();
-            else
+            if (null !== res.data.next){
                 this.getAllItemsInPlayList(next100)
+                return
+            }
+            this.getAlternatives();
 
         })
         .catch((err) =>
@@ -64,22 +62,24 @@ class Quiz extends Component{
     }
     render(){
         if (undefined !== this.state.tracks &&
-            undefined !== this.state.alternatives &&
-            undefined !== this.state.correctAlternative)
+                undefined !== this.state.alternatives &&
+                undefined !== this.state.correctAlternative)
             return (
             <div id="quiz">
-                <Question alternatives={this.state.alternatives}/>
-                <AudioPlayer tracks={[this.state.alternatives[this.state.correctAlternative]] } withGui="1"/>
+                <Question
+                    number="1"
+                    alternatives={this.state.alternatives}
+                    questionText="Which artist's song is this?"
+                    correctAlternative={this.state.correctAlternative}/>
             </div>
             );
-        else
-            return (
+        return (
             <div id="quiz">
                 <h3>
                     Loading...
                 </h3>
             </div>
-            );
+        );
     }
 }
 export default Quiz;

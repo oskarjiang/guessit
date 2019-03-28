@@ -5,21 +5,24 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 
+/*
+    Props:
+        alternatives
+*/
 class Question extends Component{
     render(){
         return <Container>
             <Row>
                 <Col xs={12}>
                     <Jumbotron>
-                        <h1>Hello, world!</h1>
+                        <h1>Question 1</h1>
                         <p>
-                            This is a simple hero unit, a simple jumbotron-style component for calling
-                            extra attention to featured content or information.
+                            Which artist's song is this?
                         </p>
                     </Jumbotron>
                 </Col>
             </Row>
-            <Alternatives alternatives={[1, 2, 3, 4]}/>
+            <Alternatives alternatives={this.props.alternatives}/>
         </Container>
     }
 }
@@ -28,18 +31,18 @@ class Alternatives extends Component{
         return <div>     
             <Row>
                 <Col xs={6}>
-                    <Button variant="primary" size="lg" block>{this.props.alternatives[0]}</Button>
+                    <Button variant="primary" size="lg" block>{this.props.alternatives[0].artists[0].name}</Button>
                 </Col>
                 <Col xs={6}>
-                    <Button variant="primary" size="lg" block>{this.props.alternatives[1]}</Button>
+                    <Button variant="primary" size="lg" block>{this.props.alternatives[1].artists[0].name}</Button>
                 </Col>
             </Row>
             <Row>
                 <Col xs={6}>
-                    <Button variant="primary" size="lg" block>{this.props.alternatives[2]}</Button>
+                    <Button variant="primary" size="lg" block>{this.props.alternatives[2].artists[0].name}</Button>
                 </Col>
                 <Col xs={6}>
-                    <Button variant="primary" size="lg" block>{this.props.alternatives[3]}</Button>
+                    <Button variant="primary" size="lg" block>{this.props.alternatives[3].artists[0].name}</Button>
                 </Col>
             </Row>
         </div>

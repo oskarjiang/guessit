@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import config from './config.js';
 import AudioPlayer from './AudioPlayer';
-import Question from './Question/Question';
+import Quiz from './Quiz/Quiz';
 const axios = require('axios')
 class App extends Component {
   constructor(props){
@@ -50,9 +50,12 @@ class App extends Component {
   }
   render() {
     return (
-    <div className="App">
-        <Question/>
-    </div>
+        <div className="App">
+            <Quiz
+                playlistId='3Xt8b8Zs1fuZ0CkDsaPOdY'
+                requestHeaders={config.requestHeaders}
+            />
+        </div>
     );
   }
 }

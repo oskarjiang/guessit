@@ -12,13 +12,14 @@ class AudioPlayer extends Component{
     }
     componentDidMount() {
         this.setSource(this.props.tracks[this.state.currentTrack].id)
-        const audioPlayer = document.getElementById('player');
-        audioPlayer.addEventListener("ended",() => {
-            this.setState({
-                currentTrack: this.state.currentTrack + 1
-            })
-            this.setSource(this.props.tracks[this.state.currentTrack].id)
-        });
+        // const audioPlayer = document.getElementById('player');
+        // if (audioPlayer)
+        //     audioPlayer.addEventListener("ended",() => {
+        //         this.setState({
+        //             currentTrack: this.state.currentTrack + 1
+        //         })
+        //         this.setSource(this.props.tracks[this.state.currentTrack].id)
+            // });
     }
     setSource(trackId){
         const request = axios.create({
@@ -34,17 +35,26 @@ class AudioPlayer extends Component{
             )
     }
     render(){
-        return <div>
-            <TrackInfo track={this.props.tracks[this.state.currentTrack]}/>
-            <audio id="player" controls src={this.state.source} autoPlay></audio>
-        </div>
+        if (undefined !== this.state.source){
+            if (this.props.withGui){
+                return (<div>
+                    <TrackInfo track={this.props.tracks[this.state.currentTrack]}/>
+                    <audio id="player" controls src={this.state.source} autoPlay></audio>
+                </div>);
+            }
+            else{
+                return <audio id="player" src={this.state.source} autoPlay></audio>
+            }
+        }
+        else{
+            return (<h3>
+                Loading song...
+            </h3>);
+        }
     }
 }
 
 class TrackInfo extends Component{
-    constructor(props){
-        super(props);
-    }
     render(){
         return <div>
             <h1>{this.props.track.name}</h1>

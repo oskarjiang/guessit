@@ -9,17 +9,10 @@ class AudioPlayer extends Component{
             source: undefined, 
             currentTrack: 0 
         };
+        this.whenEnded = this.whenEnded.bind(this);
     }
     componentDidMount() {
         this.setSource(this.props.tracks[this.state.currentTrack].id)
-        // const audioPlayer = document.getElementById('player');
-        // if (audioPlayer)
-        //     audioPlayer.addEventListener("ended",() => {
-        //         this.setState({
-        //             currentTrack: this.state.currentTrack + 1
-        //         })
-        //         this.setSource(this.props.tracks[this.state.currentTrack].id)
-            // });
     }
     setSource(trackId){
         const request = axios.create({
@@ -28,18 +21,25 @@ class AudioPlayer extends Component{
         })
         request.get()
             .then((res) => {
+                if (null === res.data.preview_url){
+                  this.whenEnded()
+                  return
+                }
                 this.setState({source: res.data.preview_url})
             })
             .catch((err) =>
                 console.error("Token is outdated"+err)
             )
     }
+    whenEnded(){
+      this.props.whenEnded()
+    }
     render(){
-        if (undefined !== this.state.source){
+        if (null !== this.state.source &&
+              undefined !== this.state.source){
             if (this.props.withGui){
                 return (<div>
-                    <TrackInfo track={this.props.tracks[this.state.currentTrack]}/>
-                    <audio id="player" controls src={this.state.source} autoPlay></audio>
+                    <audio onEnded={this.whenEnded} id="player" controls src={this.state.source} autoPlay></audio>
                 </div>);
             }
             else{

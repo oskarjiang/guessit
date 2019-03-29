@@ -43,7 +43,7 @@ class AudioPlayer extends Component{
                 </div>);
             }
             else{
-                return <audio id="player" src={this.state.source} autoPlay></audio>
+                return <audio onEnded={this.whenEnded} id="player" src={this.state.source} autoPlay></audio>
             }
         }
         else{

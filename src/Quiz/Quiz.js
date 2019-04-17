@@ -15,7 +15,7 @@ class Quiz extends Component{
       complett: false,
       alternatives: undefined,
       correctAlternative: undefined,
-      questionNumber: 1,
+      questionNumber: 1
     };
     this.checkIfCorrectAnswer = this.checkIfCorrectAnswer.bind(this);
     this.getAlternatives = this.getAlternatives.bind(this);
@@ -23,6 +23,8 @@ class Quiz extends Component{
   componentDidMount() {
     this.getAllItemsInPlayList('https://api.spotify.com/v1/playlists/'+this.props.playlistId+'/tracks?limit=100&offset=0')
   }
+
+  // Set state.tracks to all items in playlist
   getAllItemsInPlayList(playlistUrl){
     const request = axios.create({
       baseURL: playlistUrl,
@@ -44,6 +46,8 @@ class Quiz extends Component{
          console.error("Token is outdated"+err)
       )
   }
+
+  // Logs Right or Wrong depending on answer, triggers new question after 1 sec
   checkIfCorrectAnswer(answerRight){
     if(answerRight)
       console.log('Right')
@@ -56,6 +60,8 @@ class Quiz extends Component{
     })
     setTimeout(this.getAlternatives, 1000)
   }
+
+  // Set state.alternatices to 4 tracks
   getAlternatives(){
     const _alternatives = [];
     for (let i = 0; i < 4; i++)
@@ -65,10 +71,14 @@ class Quiz extends Component{
     })
     this.setCorrectAnswer()
   }
+
+  // Get random track
   getAlternative(){
     const indexOfItemToPick = Math.floor(Math.random() * (this.state.tracks.length))
     return this.state.tracks[indexOfItemToPick]
   }
+
+  // Set correct answer at random
   setCorrectAnswer(){
     this.setState({
       correctAlternative: Math.floor(Math.random() * (3))
@@ -81,6 +91,7 @@ class Quiz extends Component{
       return (
         <div id="quiz">
           <Question
+            requestHeaders={this.props.requestHeaders}
             number={this.state.questionNumber}
             alternatives={this.state.alternatives}
             questionText="Which artist's song is this?"

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import config from './config.js';
 const axios = require('axios')
 
 class AudioPlayer extends Component{
@@ -17,7 +16,7 @@ class AudioPlayer extends Component{
     setSource(trackId){
         const request = axios.create({
             baseURL: 'https://api.spotify.com/v1/tracks/'+trackId,
-            headers: config.requestHeaders
+            headers: this.props.requestHeaders
         })
         request.get()
             .then((res) => {

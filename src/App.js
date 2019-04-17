@@ -6,9 +6,21 @@ const axios = require('axios')
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = { tracks: undefined };
+    this.state = {
+      tracks: undefined,
+      loginQueryParams: "https://accounts.spotify.com/authorize?client_id=e0597c6269bb4bcfbb0e811f3f6c937d&response_type=token&redirect_uri=http://localhost:3000"
+    };
   }
   componentDidMount() {
+    const token = window.location.hash.substring(1).split('&')[0].split('=')[1];
+    if (token)
+      this.setState({
+        requestHeaders: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer "+token
+        }
+      });
   }
 
   // Set state.tracks to top tracks
@@ -30,14 +42,18 @@ class App extends Component {
       )
   }
   render() {
-    return (
-        <div className="App">
-            <Quiz
-                playlistId='3Xt8b8Zs1fuZ0CkDsaPOdY'
-                requestHeaders={config.requestHeaders}
-            />
-        </div>
-    );
+    if (undefined !== this.state.requestHeaders)
+      return (
+          <div className="App">
+              <Quiz
+                  playlistId='3Xt8b8Zs1fuZ0CkDsaPOdY'
+                  requestHeaders={this.state.requestHeaders}
+              />
+          </div>)
+      else
+          return(
+            <a href={this.state.loginQueryParams}>Login with Spotify</a>)
+    ;
   }
 }
 

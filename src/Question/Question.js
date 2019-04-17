@@ -38,6 +38,7 @@ class Question extends Component{
         alternatives={this.props.alternatives}
         checkAnswer={this.checkAnswer}/>
       <AudioPlayer 
+        requestHeaders={this.props.requestHeaders}
         tracks={[this.props.alternatives[this.props.correctAlternative]] } 
         whenEnded={this.checkAnswer}/>
     </Container>

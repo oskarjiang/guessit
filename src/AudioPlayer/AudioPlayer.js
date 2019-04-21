@@ -11,7 +11,7 @@ class AudioPlayer extends Component{
         this.whenEnded = this.whenEnded.bind(this);
     }
     componentDidMount() {
-        this.setSource(this.props.tracks[this.state.currentTrack].id)
+        this.setSource(this.props.track.id)
     }
     setSource(trackId){
         const request = axios.create({
@@ -35,32 +35,11 @@ class AudioPlayer extends Component{
     }
     render(){
         if (null !== this.state.source &&
-              undefined !== this.state.source){
-            if (this.props.withGui){
-                return (<div>
-                    <audio onEnded={this.whenEnded} id="player" controls src={this.state.source} autoPlay></audio>
-                </div>);
-            }
-            else{
-                return <audio onEnded={this.whenEnded} id="player" src={this.state.source} autoPlay></audio>
-            }
-        }
-        else{
-            return (<h3>
-                Loading song...
-            </h3>);
-        }
-    }
-}
-
-class TrackInfo extends Component{
-    render(){
-        return <div>
-            <h1>{this.props.track.name}</h1>
-            <h1>{this.props.track.artists[0].name}</h1>
-            <h1>{this.props.track.album.name}</h1>
-            <h1>{this.props.track.popularity}</h1>
-        </div>
+              undefined !== this.state.source)
+          return <audio onEnded={this.whenEnded} id="player" src={this.state.source} autoPlay></audio>
+        return (<h3>
+            Loading song...
+        </h3>);
     }
 }
 

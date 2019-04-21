@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Question from '../Question/Question';
+import QuestionFactory from '../QuestionFactory/QuestionFactory';
+import LoadingDisplay from '../LoadingDisplay/LoadingDisplay';
 const axios = require('axios')
 
 /*
@@ -12,13 +13,9 @@ class Quiz extends Component{
     super(props);
     this.state = { 
       tracks: [],
-      complett: false,
-      alternatives: undefined,
-      correctAlternative: undefined,
-      questionNumber: 1
+      questionNumber: 1,
+      allTracksFetched: false,
     };
-    this.checkIfCorrectAnswer = this.checkIfCorrectAnswer.bind(this);
-    this.getAlternatives = this.getAlternatives.bind(this);
   } 
   componentDidMount() {
     this.getAllItemsInPlayList('https://api.spotify.com/v1/playlists/'+this.props.playlistId+'/tracks?limit=100&offset=0')
@@ -36,74 +33,28 @@ class Quiz extends Component{
         res.data.items.map(item => tracks.push(item.track))
         this.setState({ tracks: tracks })
         const next100 = res.data.next
-        if (null !== res.data.next){
-          this.getAllItemsInPlayList(next100)
+        if (null === res.data.next){
+          this.setState({allTracksFetched: true})
           return
         }
-        this.getAlternatives();
+        this.getAllItemsInPlayList(next100)          
       })
       .catch((err) =>
          console.error("Token is outdated"+err)
       )
   }
-
-  // Logs Right or Wrong depending on answer, triggers new question after 1 sec
-  checkIfCorrectAnswer(answerRight){
-    if(answerRight)
-      console.log('Right')
-    else
-      console.log('Wrong')
-    this.setState({
-      alternatives: undefined,
-      correctAlternative: undefined,
-      questionNumber: this.state.questionNumber + 1
-    })
-    setTimeout(this.getAlternatives, 1000)
-  }
-
-  // Set state.alternatices to 4 tracks
-  getAlternatives(){
-    const _alternatives = [];
-    for (let i = 0; i < 4; i++)
-      _alternatives.push(this.getAlternative())
-    this.setState({
-      alternatives: _alternatives
-    })
-    this.setCorrectAnswer()
-  }
-
-  // Get random track
-  getAlternative(){
-    const indexOfItemToPick = Math.floor(Math.random() * (this.state.tracks.length))
-    return this.state.tracks[indexOfItemToPick]
-  }
-
-  // Set correct answer at random
-  setCorrectAnswer(){
-    this.setState({
-      correctAlternative: Math.floor(Math.random() * (3))
-    }) 
-  }
   render(){
-    if (undefined !== this.state.tracks &&
-        undefined !== this.state.alternatives &&
-        undefined !== this.state.correctAlternative)
+    if (!this.state.allTracksFetched)
       return (
-        <div id="quiz">
-          <Question
-            requestHeaders={this.props.requestHeaders}
-            number={this.state.questionNumber}
-            alternatives={this.state.alternatives}
-            questionText="Which artist's song is this?"
-            correctAlternative={this.state.correctAlternative}
-            checkAnswer={this.checkIfCorrectAnswer}/>
-        </div>
+        <LoadingDisplay/>
       );
     return (
       <div id="quiz">
-        <h3>
-          Loading...
-        </h3>
+        <QuestionFactory
+          requestHeaders={this.props.requestHeaders}
+          number={this.state.questionNumber}
+          type={'ArtistName'}
+          tracks={this.state.tracks}/>
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import config from './config.js';
-import Quiz from './Quiz/Quiz';
+import config from '../config.js';
+import Quiz from '../Quiz/Quiz';
 const axios = require('axios')
 class App extends Component {
   constructor(props){

@@ -14,19 +14,24 @@ class Quiz extends Component{
     super(props);
     this.state = { 
       tracks: [],
-      questionNumber: 1,
+      questionNumber: 0,
       allTracksFetched: false,
       currentQuestion: undefined,
     };
+    this.getQuestions = this.getQuestions.bind(this);
   } 
   componentDidMount() {
     this.getAllItemsInPlayList('https://api.spotify.com/v1/playlists/'+this.props.playlistId+'/tracks?limit=100&offset=0')
   }
 
-  getQuestions(tracksToUse){
+  getQuestions(tracksToUse = this.state.tracks){
+    this.setState({currentQuestion: undefined})
     var question = createQuestionWithRandomType(tracksToUse, this.props.requestHeaders)
     question.then((res) => {
-      this.setState({currentQuestion: res})
+      this.setState({
+        currentQuestion: res,
+        questionNumber: this.state.questionNumber + 1
+      })
     })
     .catch((err) =>
          console.error(err)
@@ -65,7 +70,8 @@ class Quiz extends Component{
       <div id="quiz">
         <Question
           number={this.state.questionNumber}
-          questionData={this.state.currentQuestion}/>
+          questionData={this.state.currentQuestion}
+          nextQuestionFun={this.getQuestions}/>
       </div>
     );
   }

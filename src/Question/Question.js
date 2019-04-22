@@ -16,23 +16,43 @@ class Question extends Component{
   constructor(props) {
     super(props);
     this.checkAnswer = this.checkAnswer.bind(this);
+    this.state = {answerGiven: false, answerCorrect: undefined}
   }
 
   checkAnswer(answer){
-    if(this.props.questionData.correct_alternative === parseInt(answer))
-      console.log('Right')
+    if (this.props.questionData.correct_alternative === parseInt(answer))
+      this.setState({answerCorrect: true})
     else
-      console.log('Wrong')
+      this.setState({answerCorrect: false})
+    this.setState({answerGiven: true})
+    setTimeout(this.props.nextQuestionFun, 1500)
   }
-  render(){
+  render(){    
+    if (this.state.answerGiven)
+      if (this.state.answerCorrect)
+        return <Container>
+          <Row>
+            <Col xs={12}>
+            </Col>
+          </Row>
+          <h1>Correct!</h1>
+        </Container>
+      else
+        return <Container>
+          <Row>
+            <Col xs={12}>
+            </Col>
+          </Row>
+          <h1>Wrong!</h1>
+        </Container>
     return <Container>
       <Row>
         <Col xs={12}>
           <Jumbotron>
-            <h1>Question {this.props.number}</h1>
-            <p>
+            <p>Question {this.props.number}</p>
+            <h2>
               {this.props.questionData.question}
-            </p>
+            </h2>
           </Jumbotron>
         </Col>
       </Row>

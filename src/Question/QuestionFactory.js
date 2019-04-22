@@ -1,7 +1,13 @@
 import createArtistNameQuestion from './QuestionTypes/ArtistName';
+import createReleaseYearQuestion from './QuestionTypes/ReleaseYear';
+import createSongNameQuestion from './QuestionTypes/SongName';
+import createAlbumNameQuestion from './QuestionTypes/AlbumName';
 
 const questionTypes = {
-  artistName: createArtistNameQuestion
+  artistName: createArtistNameQuestion,
+  releaseDate: createReleaseYearQuestion,
+  songName: createSongNameQuestion,
+  albumName: createAlbumNameQuestion,
 }
 
 const createQuestionWithRandomType = function(tracks, requestHeaders){

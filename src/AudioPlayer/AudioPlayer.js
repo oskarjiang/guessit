@@ -11,7 +11,7 @@ class AudioPlayer extends Component{
     render(){
         if (null !== this.props.source &&
               undefined !== this.props.source)
-          return <audio controls volume="0.0" onEnded={this.whenEnded} id="player" src={this.props.source} autoPlay></audio>
+          return <audio volume="0.5" onEnded={this.whenEnded} id="player" src={this.props.source} autoPlay></audio>
         return (<h3>
             No tune
         </h3>);

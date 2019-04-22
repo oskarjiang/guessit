@@ -27,7 +27,6 @@ class Quiz extends Component{
     var question = createQuestionWithRandomType(tracksToUse, this.props.requestHeaders)
     question.then((res) => {
       this.setState({currentQuestion: res})
-      console.log(res)
     })
     .catch((err) =>
          console.error(err)

@@ -18,15 +18,11 @@ class Question extends Component{
     this.checkAnswer = this.checkAnswer.bind(this);
   }
 
-  checkAnswer(answerRight){
-    if(answerRight)
+  checkAnswer(answer){
+    if(this.props.questionData.correct_alternative === parseInt(answer))
       console.log('Right')
     else
       console.log('Wrong')
-    this.setState({
-      alternatives: undefined,
-      correctAlternative: undefined,
-    })
   }
   render(){
     return <Container>
@@ -58,14 +54,15 @@ class AlternativesGroup extends Component{
     super(props);
     this.passChosenAlternativeNumberToParent = this.passChosenAlternativeNumberToParent.bind(this);
   }
-  passChosenAlternativeNumberToParent(answerNumber){
-    this.props.checkAnswer(answerNumber)
+  passChosenAlternativeNumberToParent(e){
+    this.props.checkAnswer(e.currentTarget.id)
   }
   render(){
     return <div>     
       <Row>
         <Col xs={6}>
-            <Button 
+            <Button
+              id="0" 
               variant="primary" 
               size="lg" 
               block
@@ -76,6 +73,7 @@ class AlternativesGroup extends Component{
         </Col>
         <Col xs={6}>
             <Button 
+              id="1" 
               variant="primary" 
               size="lg" 
               block
@@ -87,7 +85,8 @@ class AlternativesGroup extends Component{
       </Row>
       <Row>
           <Col xs={6}>
-            <Button 
+            <Button
+              id="2"  
               variant="primary" 
               size="lg" 
               block
@@ -97,7 +96,8 @@ class AlternativesGroup extends Component{
             </Button>
           </Col>
           <Col xs={6}>
-            <Button 
+            <Button
+              id="3"  
               variant="primary" 
               size="lg" 
               block

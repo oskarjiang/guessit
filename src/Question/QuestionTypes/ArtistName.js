@@ -1,47 +1,29 @@
-const axios = require('axios')
 const createArtistNameQuestion = function(tracksToUse, requestHeaders){
-  return new Promise(function(resolve, reject){    
-    const request = axios.create({
-      baseURL: 'https://api.spotify.com/v1/tracks/2VxeLyX666F8uXCJ0dZF8B',
-      headers: requestHeaders
+  return new Promise(function(resolve, reject){
+    const correctAlternative = Math.floor(Math.random() * (3))
+    const alternatives = [];
+    let audio_source = undefined
+    for (let i = 0; i < 4; i++){
+      const alternative = getAlternative(tracksToUse, alternatives)
+      alternatives.push(alternative.artists[0].name)
+      if (i === correctAlternative)
+        audio_source = alternative.preview_url
+    }
+    resolve({
+      question: "Who's the artist?",
+      alternatives: alternatives,
+      correct_alternative: correctAlternative,
+      audio_source: audio_source,
     })
-    request.get()
-        .then((res) => {
-            if (null === res.data.preview_url){
-              this.whenEnded()
-              return
-            }
-            resolve({
-              question: "Who's the artist?",
-              alternatives: [
-                'Westlife',
-                'BSB',
-                'Ghost',
-                'Justin Bieber',
-              ],
-              correct_alternative: 3,
-              audio_source: res.data.preview_url
-            })
-        })
-        .catch((err) =>
-          reject(err)
-        )
   })
 }
 
-// Set state.alternatices to 4 tracks
-function getAlternatives(){
-  const _alternatives = [];
-  for (let i = 0; i < 4; i++){
-    const indexOfItemToPick = Math.floor(Math.random() * (this.props.tracks.length))
-    const alternative = this.props.tracks[indexOfItemToPick]
-    _alternatives.push(alternative)
-  }
-  this.setState({
-    alternatives: _alternatives,
-    correctAlternative: Math.floor(Math.random() * (3)),
-  })
+function getAlternative(tracksToUse, usedAlternatives){
+  let indexOfItemToPick = null
+  do {
+    indexOfItemToPick = Math.floor(Math.random() * (tracksToUse.length))
+  } while (null === tracksToUse[indexOfItemToPick].preview_url)
+  return tracksToUse[indexOfItemToPick]
 }
-
 export default createArtistNameQuestion
 
